@@ -3,14 +3,10 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // require de nos Controllers
-use MPuget\blog\Controllers\CoreController;
-use MPuget\blog\Controllers\MainController;
-use MPuget\blog\Controllers\ErrorController;
+use MPuget\blog\controllers\CoreController;
+use MPuget\blog\controllers\MainController;
+use MPuget\blog\controllers\ErrorController;
 
-// require de nos Controllers
-require_once __DIR__ . '/../app/controllers/CoreController.php';
-require_once __DIR__ . '/../app/controllers/MainController.php';
-require_once __DIR__ . '/../app/controllers/ErrorController.php';
 
 
 //* -----------------------------------------------------
@@ -19,7 +15,7 @@ require_once __DIR__ . '/../app/controllers/ErrorController.php';
 
 // On commence par instancier un objet AltoRouter
 $router = new AltoRouter();
-
+// echo get_class($router);
 // on donne à AltoRouter la partie de l'URL à ne pas prendre en compte pour faire la 
 // comparaison entre l'URL demandée par le visiteur (exemple /categoy/1) et l'URL de notre route
 $publicFolder = dirname($_SERVER['SCRIPT_NAME']);
@@ -28,40 +24,18 @@ $router->setBasePath($publicFolder);
 
 
 // On va ensuite pouvoir mapper nos routes
-$homr =$router->map(
+$router->map(
     'GET',
     '/', // l'URL de cette route
     // target :
     [
         'action' => 'home', // méthode à appeler
-        'controller' => 'MainController' // controller concerné
+        'controller' => 'MPuget\blog\controllers\MainController' // controller concerné
     ],
     'home' // le nom qu'on donne à notre route (pour $router->generate())
 );
+$router->generate('home');
 
-var_dump($homr);
-var_dump($router->generate('home'));
-// $router->map(
-//     'GET',
-//     '/about', // l'URL de cette route
-//     // target :
-//     [
-//         'action' => 'about', // méthode à appeler
-//         'controller' => 'MainController' // controller concerné
-//     ],
-//     'about' // le nom qu'on donne à notre route (pour $router->generate())
-// );
-
-// $router->map(
-//     'GET',
-//     '/product/[i:id_produit]', // l'URL de cette route
-//     // target :
-//     [
-//         'action' => 'product', // méthode à appeler
-//         'controller' => 'ProductController' // controller concerné
-//     ],
-//     'product' // le nom qu'on donne à notre route (pour $router->generate())
-// );
 
 // on vient "matcher" l'URL demandée par le visiteur avec nos routes définies ci-dessus !
 $match = $router->match();
@@ -73,7 +47,7 @@ $match = $router->match();
 //* -----------------------------------------------------
 //*                     Dispatcher
 //* -----------------------------------------------------
-var_dump($match);
+
 // est-ce que notre route existe ? 
 if($match) {
   // notre route existe, on va récupérer les données de la route 
