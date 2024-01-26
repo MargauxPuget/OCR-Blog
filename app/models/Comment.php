@@ -1,19 +1,20 @@
 <?php
 
-// namespace MPuget\Entity;
-// use DateTime;
+namespace MPuget\blog\models;
+
+use DateTime;
+use MPuget\blog\models\IdTrait;
+use MPuget\blog\models\TimeTrait;
 
 /**
  * repositoryClass=CommentRepository::class
  */
-class Comment extends TimeTrait
+class Comment
 {
-    /**
-     * commentId
-     * type="integer"
-     */
-    private $commentId;
 
+    use IdTrait;
+    use TimeTrait;
+    
     /**
      * title
      * type="text"
@@ -38,25 +39,11 @@ class Comment extends TimeTrait
      */
     private $postId;
 
-    /**
-     * type="datetime"
-     */
-    private $createdAt;
-
-    /**
-     * type="datetime", nullable=true)
-     */
-    private $updatedAt;
-
     public function __construct()
     {
         $this->setCreatedAt(new DateTime());
     }
 
-    public function getCommentId(): ?int
-    {
-        return $this->commentId;
-    }
 
     public function getTitle(): ?string
     {
@@ -102,30 +89,6 @@ class Comment extends TimeTrait
     public function setPostId(int $postId): self
     {
         $this->postId = $postId;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

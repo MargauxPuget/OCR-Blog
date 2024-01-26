@@ -5,6 +5,7 @@ namespace MPuget\blog\models;
 use DateTime;
 use PDO;
 use MPuget\blog\utils\Database;
+use MPuget\blog\models\IdTrait;
 use MPuget\blog\models\TimeTrait;
 
 /**
@@ -12,13 +13,8 @@ use MPuget\blog\models\TimeTrait;
  */
 class Post
 {
-
+    use IdTrait;
     use TimeTrait;
-    /**
-     * post-id
-     * type="integer"
-     */
-    private $postId;
 
     /**
      * title
@@ -38,26 +34,10 @@ class Post
      */
     private $userId;
 
-    /**
-     * created_at
-     * type="datetime"
-     */
-    private $createdAt;
-
-    /**
-     * updated_at
-     * type="datetime", nullable=true
-     */
-    private $updatedAt;
     
     public function __construct()
     {
         $this->setCreatedAt(new datetime());
-    }
-
-    public function getPostId(): ?int
-    {
-        return $this->id;
     }
 
     public function getTitle(): ?string
@@ -92,30 +72,6 @@ class Post
     public function setUserId(int $userId): self
     {
         $this->userId = $userId;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

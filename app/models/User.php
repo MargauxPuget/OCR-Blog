@@ -3,17 +3,15 @@
 namespace MPuget\blog\Models;
 
 use DateTime;
+use MPuget\blog\models\IdTrait;
+use MPuget\blog\models\TimeTrait;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
 class User extends TimeTrait
 {
-    /**
-     * userId
-     * type="integer"
-     */
-    private $userId;
+    use IdTrait;
 
     /**
      * type="string", length=64
@@ -38,11 +36,6 @@ class User extends TimeTrait
     public function __construct()
     {
         $this->setCreatedAt(new DateTime());
-    }
-
-    public function getUserId(): ?int
-    {
-        return $this->UserId;
     }
 
     public function getFirstname(): ?string

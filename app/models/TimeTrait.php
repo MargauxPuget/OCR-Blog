@@ -9,21 +9,8 @@ use MPuget\blog\utils\Database;
 // La plus part de nos modèles vont hériter de cette classe / de ce trait !
 trait TimeTrait
 {
-    // ici on va définir toutes les propriétés & méthodes communes à tous nos modèles !
-
-    protected $id;
     protected $created_at;
     protected $updated_at;
-
-    /**
-     * Get the value of id
-     * 
-     * @return Integer Id du produit
-     */ 
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Get the value of created_at
