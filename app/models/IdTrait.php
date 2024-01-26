@@ -6,7 +6,7 @@ trait IdTrait
 {
     // ici on va définir toutes les propriétés & méthodes communes à tous nos modèles !
 
-    protected $id;
+    private $id;
 
     /**
      * Get the value of id

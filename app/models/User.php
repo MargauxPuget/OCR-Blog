@@ -3,13 +3,14 @@
 namespace MPuget\blog\Models;
 
 use DateTime;
+use PDO;
+use MPuget\blog\utils\Database;
 use MPuget\blog\models\IdTrait;
 use MPuget\blog\models\TimeTrait;
+use MPuget\blog\Repository\UserRepository;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- */
-class User extends TimeTrait
+
+class User
 {
     use IdTrait;
 
@@ -35,7 +36,6 @@ class User extends TimeTrait
 
     public function __construct()
     {
-        $this->setCreatedAt(new DateTime());
     }
 
     public function getFirstname(): ?string
@@ -84,5 +84,59 @@ class User extends TimeTrait
         $this->password = $password;
 
         return $this;
+    }
+
+    // 3ème chose à ajouter dans nos modèles : des méthodes findAll() & find()
+
+    /**
+     * findAll() permet de récupérer tous les enregistrement de la table product
+     * 
+     * @return User[]
+     */
+    public function findAll()
+    {
+        // notre requête SQL
+        $sql = "SELECT * FROM `user`";
+
+        // on récupère notre connexion à la BDD
+        $pdo = Database::getPDO();
+
+        // https://kourou.oclock.io/content/uploads/2020/11/query-exec.png
+        // on récupère un pdo statement avec $pdo->query($sql)
+        $pdoStmt = $pdo->query($sql);
+
+        // https://kourou.oclock.io/content/uploads/2020/11/fetch-fetchall.png
+        $results = $pdoStmt->fetchAll();
+
+        // il ne nous reste plus qu'à ... retourner ce tableau results !
+        return $results;
+    }
+
+    /**
+     * find() permet de récupérer un produit spécifique par son id
+     * 
+     * @param Integer id du produit à récupérer
+     * @return User
+     */
+    public function find($id)
+    {
+        // notre requête SQL
+        $sql = "SELECT * FROM `user` WHERE id = {$id}";
+
+        // on récupère notre connexion à la BDD
+        $pdo = Database::getPDO();
+        
+        // on récupère un pdo statement avec $pdo->query($sql)
+        $pdoStmt = $pdo->query($sql);
+        $pdoStatement = $pdo->prepare('SELECT * FROM `user` WHERE id = :id');
+        $pdoStatement->execute([
+            'id' => $id,
+        ]);
+
+        // pour récupérer un seul objet de type User, on utilise 
+        // la méthode fetchObject() de PDO !
+        $result = $pdoStatement->fetchObject();
+
+        return $result;
     }
 }

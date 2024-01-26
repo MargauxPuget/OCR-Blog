@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : ven. 12 jan. 2024 à 17:12
+-- Généré le : ven. 26 jan. 2024 à 15:27
 -- Version du serveur :  10.3.25-MariaDB-0ubuntu0.20.04.1
 -- Version de PHP : 7.4.3
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `comment` (
-  `comment_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `titre` varchar(256) NOT NULL,
   `body` text NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE `comment` (
 --
 
 CREATE TABLE `post` (
-  `post-id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `title` varchar(128) NOT NULL,
   `body` text NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE `post` (
 -- Déchargement des données de la table `post`
 --
 
-INSERT INTO `post` (`post-id`, `title`, `body`, `user_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `post` (`id`, `title`, `body`, `user_id`, `created_at`, `updated_at`) VALUES
 (1, 'Mon premier post !', 'Il est crée de la BDD.', 1, '2024-01-12 17:06:26', NULL);
 
 -- --------------------------------------------------------
@@ -67,7 +67,7 @@ INSERT INTO `post` (`post-id`, `title`, `body`, `user_id`, `created_at`, `update
 --
 
 CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `firstname` varchar(64) NOT NULL,
   `lastname` varchar(64) NOT NULL,
   `email` varchar(128) NOT NULL,
@@ -78,7 +78,7 @@ CREATE TABLE `user` (
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`user_id`, `firstname`, `lastname`, `email`, `password`) VALUES
+INSERT INTO `user` (`id`, `firstname`, `lastname`, `email`, `password`) VALUES
 (1, 'Margaux', 'Puget', 'margaux_puget@yopmail.fr', 'devine');
 
 --
@@ -89,19 +89,19 @@ INSERT INTO `user` (`user_id`, `firstname`, `lastname`, `email`, `password`) VAL
 -- Index pour la table `comment`
 --
 ALTER TABLE `comment`
-  ADD PRIMARY KEY (`comment_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `post`
 --
 ALTER TABLE `post`
-  ADD PRIMARY KEY (`post-id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -111,19 +111,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `post`
 --
 ALTER TABLE `post`
-  MODIFY `post-id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
