@@ -3,24 +3,28 @@
 namespace MPuget\blog\Repository;
 
 use MPuget\blog\Models\User;
+use MPuget\blog\utils\Database;
 
 
-class UserRepository
+class UserRepository extends DefaultRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function find($id): User
     {
-        parent::__construct($registry, User::class);
+        $pdoStatement = $this->pdo->prepare('SELECT * FROM `user` WHERE id = :id');
+        $pdoStatement->execute([
+            'id' => $id,
+        ]);
+
+        // pour récupérer un seul objet de type User, on utilise
+        // la méthode fetchObject() de PDO !
+        $result = $pdoStatement->fetchObject();
+
+       $user = new User();
+       $user->setId($result['id']);
+       $user->setFirstname($result['firstname']);
+       $user->setLastname($result['lastname']);
+       $user->setEmail($result['email']);
+
+        return $user;
     }
-
-    public function add(User $entity, bool $flush = false): void
-    {
-        
-    }
-
-    public function remove(User $entity, bool $flush = false): void
-    {
-        
-    }
-
-
 }

@@ -7,6 +7,7 @@ use PDO;
 use MPuget\blog\utils\Database;
 use MPuget\blog\models\IdTrait;
 use MPuget\blog\models\TimeTrait;
+use MPuget\blog\Models\User;
 
 /**
  * repositoryClass=PostRepository::class
@@ -28,13 +29,8 @@ class Post
      */
     private $body;
 
-    /**
-     * user-id
-     * type="integer"
-     */
-    private $userId;
+    private User $user;
 
-    
     public function __construct()
     {
         $this->setCreatedAt(new datetime());
@@ -64,14 +60,14 @@ class Post
         return $this;
     }
 
-	public function getUserId(): ?string
+	public function getUser(): ?User
     {
-        return $this->userId;
+        return $this->user;
     }
 
-    public function setUserId(int $userId): self
+    public function setUser(User $user): self
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
