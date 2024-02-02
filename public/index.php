@@ -5,6 +5,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 // require de nos Controllers
 use MPuget\blog\Controllers\CoreController;
 use MPuget\blog\Controllers\MainController;
+use MPuget\blog\Controllers\UserController;
 use MPuget\blog\Controllers\ErrorController;
 
 
@@ -36,16 +37,40 @@ $router->map(
 $router->generate('home');
 
 $router->map(
-  'POST',
+  'get',
   'user',
   // target :
   [
-      'action' => 'user',
-      'controller' => 'MPuget\blog\Controllers\MainController'
+      'action' => 'home',
+      'controller' => 'MPuget\blog\Controllers\UserController'
   ],
-  'user'
+  'userHome'
 );
-$router->generate('user');
+$router->generate('userHome');
+
+$router->map(
+  'POST',
+  'formUser',
+  // target :
+  [
+      'action' => 'formUser',
+      'controller' => 'MPuget\blog\Controllers\UserController'
+  ],
+  'formUser'
+);
+$router->generate('formUser');
+
+$router->map(
+  'POST',
+  'addUser',
+  // target :
+  [
+      'action' => 'addUser',
+      'controller' => 'MPuget\blog\Controllers\UserController'
+  ],
+  'addUser'
+);
+$router->generate('addUser');
 
 $router->map(
   'post',
@@ -53,7 +78,7 @@ $router->map(
   // target :
   [
       'action' => 'deleteUser',
-      'controller' => 'MPuget\blog\Controllers\MainController'
+      'controller' => 'MPuget\blog\Controllers\UserController'
   ],
   'deleteUser'
 );

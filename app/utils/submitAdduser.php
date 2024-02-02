@@ -1,4 +1,4 @@
-<h1>Message bien reçu en POST et échappé pour le protéger!</h1>
+<h2>Message bien reçu en POST et échappé pour le protéger!</h2>
         
 <?php
 $postData = $_POST;

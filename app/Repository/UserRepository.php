@@ -17,12 +17,16 @@ class UserRepository extends AbstractRepository
      */
     public function findAll()
     {
-        $sql = "SELECT * FROM `user`";
-        $pdoStmt = $pdo->query($sql);
+        $pdoStatement = $this->pdo->prepare('SELECT id FROM `user`');
+        $pdoStatement->execute();
+        $userList = $pdoStatement->fetchAll();
+        $users = [];
+        foreach ($userList as $user) {
+            $user = $this->find($user['id']);
+            $users[] = $user;
+        }
 
-        $results = $pdoStmt->fetchAll();
-
-        return $results;
+        return $users;
     }
 
     /**
@@ -33,13 +37,14 @@ class UserRepository extends AbstractRepository
      */
     public function find($id)
     {
+        $id = intval($id); 
         // notre requête SQL
         $sql = "SELECT * FROM `user` WHERE id = {$id}";
 
         
         // on récupère un pdo statement avec $pdo->query($sql)
         $pdoStmt = $this->pdo->query($sql);
-        var_dump($pdoStmt);
+
         $pdoStatement = $this->pdo->prepare('SELECT * FROM `user` WHERE id = :id');
         $pdoStatement->execute([
             'id' => $id,
@@ -53,9 +58,9 @@ class UserRepository extends AbstractRepository
     }
 
 
-    public function createUser()
+    public function addUser()
     {
-        var_dump("UserRepository->createUser()");
+        var_dump("UserRepository->addUser()");
 
         $newUser = $_POST;
         if (

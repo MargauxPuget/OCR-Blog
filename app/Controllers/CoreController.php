@@ -21,8 +21,8 @@ class CoreController
 
         // on va charger nos vues (header + viewName + footer)
         // $viewData est disponible dans chaque fichier de vue
-       // require_once __DIR__ . '/../views/header.tpl.php';
+        require_once __DIR__ . '/../views/commons/header.twig';
         require_once __DIR__ . '/../views/' . $viewName . '.twig';
-        //require_once __DIR__ . '/../views/footer.tpl.php';
+        require_once __DIR__ . '/../views/commons/footer.twig';
     }
 }

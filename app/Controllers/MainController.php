@@ -31,42 +31,4 @@ class MainController extends CoreController
         $this->show('home', $viewData);
     }
 
-    public function user()
-    {
-        var_dump("MainController->user()");
-        // je veux ajouter un nouvelle utilisateur
-        $userRepository = new UserRepository();
-        $newUser = $userRepository->createUser();
-
-        $viewData = [
-            'pageTitle' => 'OCR - Blog - user',
-            'newUser' => $newUser
-        ];
-
-        $this->show('user', $viewData);
-    }
-
-    public function deleteUser()
-    {
-        var_dump("MainController->deleteUser()");
-        // je veux ajouter un nouvelle utilisateur
-        $userRepository = new UserRepository();
-        $user = $userRepository->deleteUser();
-
-        $viewData = [
-            'pageTitle' => 'OCR - Blog - user - delete',
-            'user' => $user
-        ];
-
-        $this->show('deleteUser', $viewData);
-    }
-
-    public function about()
-    {
-        $viewData = [
-            'pageTitle' => 'OCR - Blog - À propos'
-        ];
-
-        $this->show('about', $viewData);
-    }
 }
