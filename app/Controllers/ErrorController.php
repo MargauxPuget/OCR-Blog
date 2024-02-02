@@ -2,7 +2,7 @@
 
 namespace MPuget\blog\controllers;
 
-use MPuget\blog\controllers\CoreController;
+use MPuget\blog\Controllers\CoreController;
 
 class ErrorController extends CoreController
 {

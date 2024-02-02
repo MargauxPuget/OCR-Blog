@@ -3,9 +3,9 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // require de nos Controllers
-use MPuget\blog\controllers\CoreController;
-use MPuget\blog\controllers\MainController;
-use MPuget\blog\controllers\ErrorController;
+use MPuget\blog\Controllers\CoreController;
+use MPuget\blog\Controllers\MainController;
+use MPuget\blog\Controllers\ErrorController;
 
 
 
@@ -22,27 +22,45 @@ $publicFolder = dirname($_SERVER['SCRIPT_NAME']);
 $router->setBasePath($publicFolder);
 
 
-
 // On va ensuite pouvoir mapper nos routes
 $router->map(
     'GET',
-    '/', // l'URL de cette route
+    '', // l'URL de cette route
     // target :
     [
         'action' => 'home', // méthode à appeler
-        'controller' => 'MPuget\blog\controllers\MainController' // controller concerné
+        'controller' => 'MPuget\blog\Controllers\MainController' // controller concerné
     ],
     'home' // le nom qu'on donne à notre route (pour $router->generate())
 );
 $router->generate('home');
 
+$router->map(
+  'POST',
+  'user',
+  // target :
+  [
+      'action' => 'user',
+      'controller' => 'MPuget\blog\Controllers\MainController'
+  ],
+  'user'
+);
+$router->generate('user');
 
-// on vient "matcher" l'URL demandée par le visiteur avec nos routes définies ci-dessus !
+$router->map(
+  'post',
+  'deleteUser',
+  // target :
+  [
+      'action' => 'deleteUser',
+      'controller' => 'MPuget\blog\Controllers\MainController'
+  ],
+  'deleteUser'
+);
+$router->generate('deleteUser');
+
+
 $match = $router->match();
-// $router->match() va retourner false si la route n'existe pas !
-
-
-
 
 //* -----------------------------------------------------
 //*                     Dispatcher
