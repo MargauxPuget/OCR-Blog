@@ -72,13 +72,4 @@ class UserController extends CoreController
 
         $this->show('deleteUser', $viewData);
     }
-
-    public function about()
-    {
-        $viewData = [
-            'pageTitle' => 'OCR - Blog - À propos'
-        ];
-
-        $this->show('about', $viewData);
-    }
 }

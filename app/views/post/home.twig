@@ -1,0 +1,35 @@
+HoMe POST
+{# <a class="btn btn--add" href="/createdUser">ajouter un utilisateur</a>
+
+<h2>Liste des utilisateurs</h2>
+<ul>
+    {% for user in viewData.userList %}
+        <li>{{ user.firstname|e }}
+          <a class="btn btn--update" href="/updatedUser">modifier un utilisateur</a>
+          <a class="btn btn--delete" href="/deleteUser">supprimer un utilisateur</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<h2>CRUD utilisateur</h2>
+
+<form class="btn" action="/formUser" method="post">
+
+    <button class="btn btn--add" type="submit">Ajouter</button>
+</form>
+
+<form class="btn" action="/updateUser" method="post">
+    <div>
+        <label for="identifiant">Identifiant</label>
+        <input type="number" name="identifiant">
+    </div>
+    <button class="btn btn--update" type="submit">Modifier</button>
+</form>
+
+<form class="btn" action="/deleteUser" method="post">
+    <div>
+        <label for="identifiant">Identifiant</label>
+        <input type="number" name="identifiant">
+    </div>
+    <button class="btn btn--delete" type="submit">Supprimer</button>
+</form>s #}

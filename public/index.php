@@ -36,6 +36,11 @@ $router->map(
 );
 $router->generate('home');
 
+
+//*--------------------------
+//*   User
+//*--------------------------
+
 $router->map(
   'get',
   'user',
@@ -86,6 +91,78 @@ $router->generate('deleteUser');
 
 
 $match = $router->match();
+
+//*--------------------------
+//*   Post
+//*--------------------------
+
+
+$router->map(
+  'get',
+  'post',
+  // target :
+  [
+      'action' => 'home',
+      'controller' => 'MPuget\blog\Controllers\PostController'
+  ],
+  'postHome'
+);
+$router->generate('postHome');
+
+$router->map(
+  'POST',
+  'formPost',
+  // target :
+  [
+      'action' => 'formPost',
+      'controller' => 'MPuget\blog\Controllers\PostController'
+  ],
+  'formPost'
+);
+$router->generate('formPost');
+
+$router->map(
+  'POST',
+  'addPost',
+  // target :
+  [
+      'action' => 'addPost',
+      'controller' => 'MPuget\blog\Controllers\PostController'
+  ],
+  'addPost'
+);
+$router->generate('addPost');
+
+$router->map(
+  'post',
+  'deletePost',
+  // target :
+  [
+      'action' => 'deletePost',
+      'controller' => 'MPuget\blog\Controllers\PostController'
+  ],
+  'deletePost'
+);
+$router->generate('deletePost');
+
+
+$match = $router->match();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //* -----------------------------------------------------
 //*                     Dispatcher
