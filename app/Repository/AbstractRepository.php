@@ -2,7 +2,7 @@
 
 namespace MPuget\blog\Repository;
 
-use MPuget\blog\utils\Database;
+use MPuget\blog\Utils\Database;
 
 class AbstractRepository
 {

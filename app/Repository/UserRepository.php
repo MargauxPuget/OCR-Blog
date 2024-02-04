@@ -3,6 +3,7 @@
 namespace MPuget\blog\Repository;
 
 use MPuget\blog\Models\User;
+use MPuget\blog\Utils\Database;
 
 
 class UserRepository extends AbstractRepository
@@ -38,12 +39,6 @@ class UserRepository extends AbstractRepository
     public function find($id)
     {
         $id = intval($id); 
-        // notre requête SQL
-        $sql = "SELECT * FROM `user` WHERE id = {$id}";
-
-        
-        // on récupère un pdo statement avec $pdo->query($sql)
-        $pdoStmt = $this->pdo->query($sql);
 
         $pdoStatement = $this->pdo->prepare('SELECT * FROM `user` WHERE id = :id');
         $pdoStatement->execute([
@@ -54,7 +49,14 @@ class UserRepository extends AbstractRepository
         // la méthode fetchObject() de PDO !
         $result = $pdoStatement->fetchObject();
 
-        return $result;
+        $user = new User();
+        $user->setId($result->id);
+        $user->setFirstname($result->firstname);
+        $user->setLastname($result->lastname);
+        $user->setEmail($result->email);
+        $user->setpassword($result->password);
+
+        return $user;
     }
 
 
@@ -76,7 +78,6 @@ class UserRepository extends AbstractRepository
         echo('Bienvenue ' . $newUser['firstname'] . ' ! <br>');
 
         $user = new User($newUser);
-        var_dump($user);
 
         $sql = "INSERT INTO user (firstname, lastname, email, password) VALUES (:firstname, :lastname, :email, :password)";
         $pdoStatement = $this->pdo->prepare($sql);
@@ -88,22 +89,41 @@ class UserRepository extends AbstractRepository
         ]);
 
 
+        $userId = Database::getPDO()->lastInsertId();
+        $user->setId($userId);
+        var_dump($user);
+
         echo('Bienvenue ' . $newUser['firstname'] . ' maintenant vous etes bien ajouté ! <br>');
 
         return $this;
     }
 
-    public function deleteUser() : bool
+    public function updateUser()
+    {
+        var_dump("UserRepository->updateUser()");
+
+var_dump('$_POST', $_POST);
+        $newUser = [];
+        if (isset($_POST['firstname'])){
+            $newUser = $_POST['firstname'];
+        }
+        if (isset($_POST['lastname'])){
+            $newUser = $_POST['lastname'];
+        }
+        if (isset($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+            $newUser = $_POST['email'];
+        }
+        if (isset($_POST['password'])){
+            $newUser = $_POST['password'];
+        }
+        var_dump($newUser);
+        echo('Bienvenue ' . $newUser['firstname'] . ' ! <br>');
+    }
+
+    public function deleteUser(int $id) : bool
     {
         var_dump("UserRepository->deleteUser()");
 
-        $postData = $_POST;
-        var_dump($postData);
-        if (!isset($postData['identifiant']) && !is_int($postData['identifiant'])) {
-            echo("Il faut l'identifiant d'un utilisateur.");
-            return false;
-        }
-        $userId = $postData['identifiant'];
         echo('Byebye, number :  ' . $userId . ' ! <br>');
 
         $sql = "DELETE FROM `user` WHERE id = ( :id) ";

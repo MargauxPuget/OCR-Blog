@@ -4,7 +4,7 @@ namespace MPuget\blog\Models;
 
 use DateTime;
 use PDO;
-use MPuget\blog\utils\Database;
+use MPuget\blog\Utils\Database;
 use MPuget\blog\Models\IdTrait;
 use MPuget\blog\Models\TimeTrait;
 use MPuget\blog\Repository\UserRepository;

@@ -2,11 +2,12 @@
 
 namespace MPuget\blog\models;
 
-use DateTime;
 use PDO;
-use MPuget\blog\utils\Database;
-use MPuget\blog\models\IdTrait;
-use MPuget\blog\models\TimeTrait;
+use DateTime;
+use MPuget\blog\Models\User;
+use MPuget\blog\Models\IdTrait;
+use MPuget\blog\Utils\Database;
+use MPuget\blog\Models\TimeTrait;
 
 /**
  * repositoryClass=PostRepository::class
@@ -32,11 +33,19 @@ class Post
      * user-id
      * type="integer"
      */
-    private $userId;
+    private User $user;
 
     
-    public function __construct()
+    public function __construct($var = [])
     {
+        if (empty($var)) {
+            return;
+        }
+        $this->setTitle($var['title']);
+        $this->setBody($var['body']);
+        if (!empty($var['user'])) {
+            $this->setUser($var['user']);
+        }
         $this->setCreatedAt(new datetime());
     }
 
@@ -64,39 +73,16 @@ class Post
         return $this;
     }
 
-	public function getUserId(): ?string
+	public function getUser(): ?User
     {
-        return $this->userId;
+        return $this->user;
     }
 
-    public function setUserId(int $userId): self
+    public function setUser($user): self
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
-	     /**
-     * findAll() permet de récupérer tous les enregistrement de la table product
-     * 
-     * @return Product[]
-     */
-    /*public function findAll()
-    {
-        // notre requête SQL
-        $sql = "SELECT * FROM `product`";
-
-        // on récupère notre connexion à la BDD
-        $pdo = Database::getPDO();
-
-        // https://kourou.oclock.io/content/uploads/2020/11/query-exec.png
-        // on récupère un pdo statement avec $pdo->query($sql)
-        $pdoStmt = $pdo->query($sql);
-
-        // https://kourou.oclock.io/content/uploads/2020/11/fetch-fetchall.png
-        $results = $pdoStmt->fetchAll(PDO::FETCH_CLASS, 'Product');
-
-        // il ne nous reste plus qu'à ... retourner ce tableau results !
-        return $results;
-    } */
 }

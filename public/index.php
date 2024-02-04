@@ -79,6 +79,18 @@ $router->generate('addUser');
 
 $router->map(
   'post',
+  'updateUser',
+  // target :
+  [
+      'action' => 'updateUser',
+      'controller' => 'MPuget\blog\Controllers\UserController'
+  ],
+  'updateUser'
+);
+$router->generate('updateUser');
+
+$router->map(
+  'post',
   'deleteUser',
   // target :
   [

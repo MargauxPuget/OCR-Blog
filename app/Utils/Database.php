@@ -1,6 +1,6 @@
 <?php
 
-namespace MPuget\blog\utils;
+namespace MPuget\blog\Utils;
 
 use PDO;
 

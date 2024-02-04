@@ -2,7 +2,7 @@
 
 namespace MPuget\blog\models;
 
-use MPuget\blog\utils\Database;
+use MPuget\blog\Utils\Database;
 
 // TimeTrait est une class que l'on pourra appeler dans certaines autre classe
 // (c'est une forme d'héritage)
