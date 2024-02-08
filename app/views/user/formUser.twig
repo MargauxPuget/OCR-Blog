@@ -1,14 +1,11 @@
 <?php
-$updateUser = false;
-if (!empty($viewData['user'])) {
-    var_dump($viewData);
-    $updateUser = true;
-}
-
-
+    $updateUser = false;
+    if (!empty($viewData['user'])) {
+        var_dump($viewData);
+        $updateUser = true;
+    }
+    var_dump('$updateUser', $updateUser);
 ?>
-
-
 
 <h2>Ajouter un utilisateur</h2>
 
@@ -18,22 +15,22 @@ if (!empty($viewData['user'])) {
 <form action="/addUser" method="post">
 <?php endif; ?>
     <div>
-        <label for="firstname">Prénom</label> <!-- ma.pu@gm.fr-->
-        <input type="text" name="firstname" value="<?php (empty($viewData['user'])) ? '' : $viewData['user']->getFirstname(); ?>"> <!-- <strong>tata</strong> -->
+        <label for="firstname">Prénom</label>
+        <input type="text" name="firstname" value="<?= (empty($viewData['user'])) ? '' : $viewData['user']->getFirstname(); ?>">
     </div>
     <div>
-        <label for="lastname">Nom</label> <!-- ma.pu@gm.fr-->
-        <input type="text" name="lastname" value="<?php (empty($viewData['user'])) ? '' : $viewData['user']->getlastname() ?>"> <!-- <strong>tata</strong> -->
+        <label for="lastname">Nom</label>
+        <input type="text" name="lastname" value="<?= (empty($viewData['user'])) ? '' : $viewData['user']->getlastname() ?>">
     </div>
     <div>
-        <label for="email">Email</label> <!-- ma.pu@gm.fr-->
-        <input type="email" name="email" value="<?php (empty($viewData['user'])) ? '' : $viewData['user']->getEmail() ?>"> <!-- <strong>tata</strong> -->
+        <label for="email">Email</label>
+        <input type="email" name="email" value="<?= (empty($viewData['user'])) ? '' : $viewData['user']->getEmail() ?>">
     </div>
     <div>
-        <label for="password">mot de passe</label> <!-- ma.pu@gm.fr-->
-        <input type="password" name="password"> <!-- <strong>tata</strong> -->
+        <label for="password">mot de passe</label>
+        <input type="password" name="password">
     </div>
 
-    <input hidden type="number" name="identifiant" value="<?php (empty($viewData['user'])) ? '' : $viewData['user']->getId() ?>">
+    <input hidden type="number" name="identifiant" value="<?= (empty($viewData['user'])) ? '' : $viewData['user']->getId() ?>">
     <button type="submit">Créer</button>
 </form>

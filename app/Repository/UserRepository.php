@@ -59,7 +59,6 @@ class UserRepository extends AbstractRepository
         return $user;
     }
 
-
     public function addUser()
     {
         var_dump("UserRepository->addUser()");
@@ -150,6 +149,4 @@ class UserRepository extends AbstractRepository
 
         return true;
     }
-
-
 }

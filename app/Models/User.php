@@ -69,6 +69,11 @@ class User
         return $this;
     }
 
+    public function getname(): ?string
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
     public function getEmail(): ?string
     {
         return $this->email;

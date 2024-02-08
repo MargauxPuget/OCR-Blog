@@ -10,6 +10,12 @@ use MPuget\blog\Controllers\CoreController;
 
 class PostController extends CoreController
 {
+    protected $postRepo;
+
+    public function __construct(){
+        $this->postRepo = new PostRepository();
+    }
+
     public function home()
     {
         $postRepo = new PostRepository;
@@ -26,13 +32,26 @@ class PostController extends CoreController
 
     public function formPost()
     {
-        var_dump("PostController->formPost()");
+        // pour la modification dun post
+        $postData = $_POST;
+        $post = [];
+        if (isset($postData['identifiant'])) {
+            if (!isset($postData['identifiant']) && !is_int($postData['identifiant'])) {
+                echo("Il faut l'identifiant d'un utilisateur.");
+                return false;
+            }
+            $postId = intval($postData['identifiant']);
+            $post = $this->postRepo->find($postId);
+        }
+
+        // On récupère tous les utilisateur
         $userRepo = new UserRepository();
-        $userlist = $userRepo->findAll();
+        $userList = $userRepo->findAll();
 
         $viewData = [
             'pageTitle' => 'OCR - Blog - formPost',
-            'userList' => $userlist,
+            'post'      => $post,
+            'userList'  => $userList,
         ];
 
         $this->show('post/formPost', $viewData);
@@ -52,6 +71,29 @@ class PostController extends CoreController
 
         $this->show('post/post', $viewData);
     }
+
+    public function updatePost()
+    {
+        var_dump("PostController->updatePost()");
+        
+        $postData = $_POST;
+        var_dump($postData);
+        if (!isset($postData['identifiant']) && !is_int($postData['identifiant'])) {
+            echo("Il faut l'identifiant d'un utilisateur.");
+            return false;
+        }
+
+        $postId = intval($postData['identifiant']);
+        
+        $post = $this->postRepo->updatePost($postId);
+
+        $viewData = [
+            'pageTitle' => 'OCR - Blog - post - update',
+            'post' => $post
+        ];
+
+        $this->show('post/updatePost', $viewData);
+    } 
 
     public function deletePost()
     {

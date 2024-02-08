@@ -1,3 +1,10 @@
+<?php
+
+    // var_dump($viewData['postList']);
+
+
+?>
+
 <h1>HoMe POST</h1>
 
 
@@ -7,18 +14,28 @@
     <button class="btn btn--add" type="submit">Ajouter</button>
 </form>
 
-<form class="btn" action="/updatePost" method="post">
-    <div>
-        <label for="identifiant">Identifiant</label>
-        <input type="number" name="identifiant">
-    </div>
+<form class="btn" action="/formPost" method="post">
+    <label for="post">Choisissez un utilisateur : </label>
+
+    <select name="identifiant" id="post">
+        <option value="">--Choisissez quelqu'un--</option>
+
+        <?php foreach ($viewData['postList'] as $post): ?>
+            <option value="<?= $post->getId() ?>"> <?= $post->getTitle() ?></option>
+        <?php endforeach; ?>
+    </select>
     <button class="btn btn--update" type="submit">Modifier</button>
 </form>
 
 <form class="btn" action="/deletePost" method="post">
-    <div>
-        <label for="identifiant">Identifiant</label>
-        <input type="number" name="identifiant">
-    </div>
+    <label for="post">Choisissez un utilisateur : </label>
+
+    <select name="identifiant" id="post">
+        <option value="">--Choisissez quelqu'un--</option>
+
+        <?php foreach ($viewData['postList'] as $post): ?>
+            <option value="<?= $post->getId() ?>"> <?= $post->getTitle() ?></option>
+        <?php endforeach; ?>
+    </select>
     <button class="btn btn--delete" type="submit">Supprimer</button>
 </form>

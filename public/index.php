@@ -146,6 +146,18 @@ $router->generate('addPost');
 
 $router->map(
   'post',
+  'updatePost',
+  // target :
+  [
+      'action' => 'updatePost',
+      'controller' => 'MPuget\blog\Controllers\PostController'
+  ],
+  'updatePost'
+);
+$router->generate('updatePost');
+
+$router->map(
+  'post',
   'deletePost',
   // target :
   [

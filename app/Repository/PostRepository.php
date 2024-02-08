@@ -29,21 +29,20 @@ class PostRepository extends AbstractRepository
 
 
         $userRepo = new UserRepository();
-
         $userId = $result->user_id;
-
         $user = $userRepo->find($userId);
 
         $result->user = $user;
         
         $post = new Post();
+        $post->setId($result->id);
         $post->setTitle($result->title);
         $post->setBody($result->body);
         $post->setUser($result->user);
         $post->setCreatedAt($result->created_at);
         $post->setUpdatedAt($result->updated_at);
 
-        return $result;
+        return $post;
     }
 
     /**
@@ -65,7 +64,6 @@ class PostRepository extends AbstractRepository
         return $posts;
     }
 
-
     public function addPost()
     {
         var_dump("PostRepository->addPost()");
@@ -79,7 +77,6 @@ class PostRepository extends AbstractRepository
             echo('Il faut un title et un message et un auteur valide pour soumettre le formulaire.');
             return;
         }
-        echo('Voila un nouvel article ' . $newPost['title'] . ' ! <br>');
 
         $post = new Post($newPost);
         $userRepo = new UserRepository();
@@ -96,15 +93,37 @@ class PostRepository extends AbstractRepository
         ]);
 
         $postId = Database::getPDO()->lastInsertId();
-
-        
         $post = $this->find($postId);
 
-        var_dump('post', $post);
-
-        echo('Le nouvel article ' . $newPost['title'] . 'est  maintenant bien ajouté en BDD! <br>');
-
         return $post;
+    }
+
+    public function updatePost()
+    {
+        var_dump("PostRepository->updatePost()");
+
+        $post = $this->find($_POST['identifiant']);
+
+        $updatePost = [];
+        if (isset($_POST['title']) && ($_POST['title'] !== $post->getTitle())){
+            $updatePost['title'] = $_POST['title'];
+        }
+        if (isset($_POST['body']) && ($_POST['body'] !== $post->getBody())){
+            $updatePost['body'] = $_POST['body'];
+        }
+        if (isset($_POST['userId']) && ($_POST['userId'] !== $post->getUser()->getId())){
+            $updatePost['userId'] = $_POST['userId'];
+        }
+
+        $sql = "UPDATE post SET title=:title, body=:body, user_id=:userId
+        WHERE id=:id";
+        $pdoStatement = $this->pdo->prepare($sql);
+        $pdoStatement->execute([
+            'id'        => $post->getId(),
+            'title' => (isset($updatePost['title'])) ? $updatePost['title'] : $post->getTitle(),
+            'body'  => (isset($updatePost['body'])) ? $updatePost['body'] : $post->getBody(),
+            'userId'     => (isset($updatePost['userId'])) ? $updatePost['userId'] : $post->getUser()->getId(),
+        ]);
     }
 
     public function deletePost() : bool
@@ -132,6 +151,5 @@ class PostRepository extends AbstractRepository
         return true;
 
     }
-
 
 }

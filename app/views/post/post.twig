@@ -1,5 +1,5 @@
 <?php
-    var_dump($viewData);
+    // var_dump($viewData);
     //foreach ($viewData['userList'] as $user){
     //    var_dump($user->getFirstname());
     //}
@@ -11,4 +11,4 @@
 
 <p><?= $viewData['newPost']->getBody() ?></p>
 
-<p><?php var_dump($viewData['newPost']->getUser()) ?></p>
+<p><?= $viewData['newPost']->getUser()->getName() ?></p>
