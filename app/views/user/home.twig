@@ -5,19 +5,37 @@
 
     <button class="btn btn--add" type="submit">Ajouter</button>
 </form>
+<!-- ?= $viewData['userList']->getFirstname() ?> #} -->
+<ul>
 
-<form class="btn" action="/updateUser" method="post">
-    <div>
-        <label for="identifiant">Identifiant</label>
-        <input type="number" name="identifiant">
-    </div>
+</ul>
+<form class="btn" action="/formUser" method="post">
+    <label for="user">Choisissez un utilisateur : </label>
+
+    <select name="identifiant" id="user">
+        <option value="">--Choisissez quelqu'un--</option>
+
+        <?php foreach ($viewData['userList'] as $key => $user): ?>
+            <option value="<?= $user->getId() ?>"> <?= $user->getFirstname() ?></option>
+        <?php endforeach; ?>
+    </select>
     <button class="btn btn--update" type="submit">Modifier</button>
 </form>
 
 <form class="btn" action="/deleteUser" method="post">
-    <div>
+
+    <label for="user">Choisissez un utilisateur : </label>
+
+    <select name="identifiant" id="user">
+        <option value="">--Choisissez quelqu'un--</option>
+
+        <?php foreach ($viewData['userList'] as $key => $user): ?>
+            <option value="<?= $user->getId() ?>"> <?= $user->getFirstname() ?></option>
+        <?php endforeach; ?>
+    </select>
+  <!--   <div>
         <label for="identifiant">Identifiant</label>
         <input type="number" name="identifiant">
-    </div>
+    </div> -->
     <button class="btn btn--delete" type="submit">Supprimer</button>
 </form>

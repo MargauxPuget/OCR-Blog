@@ -5,6 +5,14 @@ namespace MPuget\blog\controllers;
 // classe mère de tous nos contrôleurs
 class CoreController
 {
+
+    //* -----------------------------------------------------
+    //*                Twig
+    //* -----------------------------------------------------
+
+    protected $twig;
+   
+
     // la méthode show est commune entre tous nos contrôleurs !
     // méthode show : pour afficher nos templates
     // protected pour qu'elle soit accessible dans les classes enfants (MainController, ErrorController et CatalogController)

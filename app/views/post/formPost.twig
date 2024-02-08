@@ -1,3 +1,10 @@
+<?php
+    //var_dump($viewData['userList']);
+    foreach ($viewData['userList'] as $user){
+        var_dump($user->getFirstname());
+    }
+?>
+
 <h2>Ajouter un utilisateur</h2>
 
 <form action="/addPost" method="post">
@@ -14,14 +21,11 @@
 
         <select name="userId" id="user">
         <option value="">-- Choisiez un utilisateur / auteur --</option>
-        <option value="1">Margaux</option>
-        <option value="2">Jimmy</option>
-        <option value="7">Marie</option>
-        <option value="21">Jules</option>
-        <option value="24">Tommy</option>
-        <option value="28">Anne</option>
+        <?php foreach ($viewData['userList'] as $user) : ?>
+                
+                <option value="<?= $user->getId() ?>"><?= $user->getFirstname() ?></option>
+        <?php endforeach; ?>
         </select>
-
     </div>
     <button type="submit">Créer</button>
 </form>

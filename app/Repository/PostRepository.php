@@ -96,13 +96,15 @@ class PostRepository extends AbstractRepository
         ]);
 
         $postId = Database::getPDO()->lastInsertId();
-        $post->setId($postId);
 
-        //var_dump('post', $this->find($postId));
+        
+        $post = $this->find($postId);
+
+        var_dump('post', $post);
 
         echo('Le nouvel article ' . $newPost['title'] . 'est  maintenant bien ajouté en BDD! <br>');
 
-        return $this;
+        return $post;
     }
 
     public function deletePost() : bool

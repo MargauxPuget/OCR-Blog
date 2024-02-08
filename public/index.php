@@ -9,7 +9,6 @@ use MPuget\blog\Controllers\UserController;
 use MPuget\blog\Controllers\ErrorController;
 
 
-
 //* -----------------------------------------------------
 //*                Routeur : AltoRouter
 //* -----------------------------------------------------

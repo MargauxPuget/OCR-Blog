@@ -90,53 +90,65 @@ class UserRepository extends AbstractRepository
 
 
         $userId = Database::getPDO()->lastInsertId();
+        //$user = $this->find($userId);
         $user->setId($userId);
         var_dump($user);
 
         echo('Bienvenue ' . $newUser['firstname'] . ' maintenant vous etes bien ajouté ! <br>');
 
-        return $this;
+        return $user;
     }
 
     public function updateUser()
     {
         var_dump("UserRepository->updateUser()");
 
-var_dump('$_POST', $_POST);
-        $newUser = [];
-        if (isset($_POST['firstname'])){
-            $newUser = $_POST['firstname'];
+        $user = $this->find($_POST['identifiant']);
+
+        $updateUser = [];
+        if (isset($_POST['firstname']) && ($_POST['firstname'] !== $user->getFirstname())){
+            $updateUser['firstname'] = $_POST['firstname'];
         }
-        if (isset($_POST['lastname'])){
-            $newUser = $_POST['lastname'];
+        if (isset($_POST['lastname']) && ($_POST['lastname'] !== $user->getLastname())){
+            $updateUser['lastname'] = $_POST['lastname'];
         }
-        if (isset($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
-            $newUser = $_POST['email'];
+        if (isset($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)
+        && ($_POST['email'] !== $user->getEmail())){
+            $updateUser['email'] = $_POST['email'];
         }
-        if (isset($_POST['password'])){
-            $newUser = $_POST['password'];
+        if (isset($_POST['password']) && ($_POST['password'] !== $user->getPassword())){
+            $updateUser['password'] = $_POST['password'];
         }
-        var_dump($newUser);
-        echo('Bienvenue ' . $newUser['firstname'] . ' ! <br>');
+
+        $sql = "UPDATE user SET firstname=:firstname, lastname=:lastname, email=:email, password=:password
+        WHERE id=:id";
+        $pdoStatement = $this->pdo->prepare($sql);
+        $pdoStatement->execute([
+            'id'        => $user->getId(),
+            'firstname' => (isset($updateUser['firstname'])) ? $updateUser['firstname'] : $user->getFirstname(),
+            'lastname'  => (isset($updateUser['lastname'])) ? $updateUser['lastname'] : $user->getLastname(),
+            'email'     => (isset($updateUser['email'])) ? $updateUser['email'] : $user->getEmail(),
+            'password'  => (isset($updateUser['password'])) ? $updateUser['password'] : $user->getPassword(),
+        ]);
+
     }
 
     public function deleteUser(int $id) : bool
     {
         var_dump("UserRepository->deleteUser()");
 
-        echo('Byebye, number :  ' . $userId . ' ! <br>');
+        echo('Byebye, number :  ' . $id . ' ! <br>');
 
         $sql = "DELETE FROM `user` WHERE id = ( :id) ";
         $pdoStatement = $this->pdo->prepare($sql);
         $pdoStatement->execute([
-            'id' => $userId,
+            'id' => $id,
         ]);
 
 
         echo('On pleur votre départ ! <br>');
 
         return true;
-
     }
 
 

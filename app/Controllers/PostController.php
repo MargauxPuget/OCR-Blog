@@ -5,6 +5,7 @@ namespace MPuget\blog\Controllers;
 use MPuget\blog\Models\Post;
 use MPuget\blog\Models\TimeTrait;
 use MPuget\blog\Repository\PostRepository;
+use MPuget\blog\Repository\UserRepository;
 use MPuget\blog\Controllers\CoreController;
 
 class PostController extends CoreController
@@ -26,9 +27,12 @@ class PostController extends CoreController
     public function formPost()
     {
         var_dump("PostController->formPost()");
+        $userRepo = new UserRepository();
+        $userlist = $userRepo->findAll();
 
         $viewData = [
             'pageTitle' => 'OCR - Blog - formPost',
+            'userList' => $userlist,
         ];
 
         $this->show('post/formPost', $viewData);

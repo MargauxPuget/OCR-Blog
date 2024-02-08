@@ -20,13 +20,19 @@ class UserController extends CoreController
     // une page = une méthode
     public function home()
     {
-        $userList = $this->userRepo->find(1);
-        var_dump($userList);
+        $userList = $this->userRepo->findAll();
         $viewData = [
             'pageTitle' => 'OCR - Blog - User',
             'userList' => $userList
         ];
+        //var_dump($viewData['userList']);
         
+        /* foreach ($viewData['userList'] as &$user) {
+            echo($user->getFirstname() . '<br>');
+        } */
+
+
+
         $this->show('user/home', $viewData);
     }
 
@@ -34,8 +40,23 @@ class UserController extends CoreController
     {
         var_dump("UserController->formUser()");
 
+        // pour la modification dun user
+        $postData = $_POST;
+        $user = [];
+        if (isset($postData['identifiant'])) {
+            if (!isset($postData['identifiant']) && !is_int($postData['identifiant'])) {
+                echo("Il faut l'identifiant d'un utilisateur.");
+                return false;
+            }
+
+            $userId = intval($postData['identifiant']);
+        
+            $user = $this->userRepo->find($userId);
+;        }
+
         $viewData = [
             'pageTitle' => 'OCR - Blog - formUser',
+            'user' => $user,
         ];
 
         $this->show('user/formUser', $viewData);
@@ -58,10 +79,9 @@ class UserController extends CoreController
     public function updateUser()
     {
         var_dump("UserController->updateUser()");
-
-
+        
         $postData = $_POST;
-        var_dump($postData);
+        
         if (!isset($postData['identifiant']) && !is_int($postData['identifiant'])) {
             echo("Il faut l'identifiant d'un utilisateur.");
             return false;
