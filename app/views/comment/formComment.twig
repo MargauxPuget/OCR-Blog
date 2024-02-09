@@ -1,0 +1,27 @@
+
+<div style="border:1px solid black;margin-top:10px;padding:10px;">
+    -> ajouter un btn ajouter un commentaire
+    <form class="" action="/addComment" method="post">
+
+        <div>
+            <label for="body">Message</label>
+            <textarea name="body"></textarea>
+        </div>
+        <div>
+            <label for="user">Choisissez un utilisateur : </label>
+
+            <select name="userId" id="user">
+                <option value="">--Choisissez quelqu'un--</option>
+
+                <?php foreach ($viewData['userList'] as $user): ?>
+                    <option value="<?= $user->getId() ?>"> <?= $user->getName() ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+		
+    	<input hidden type="number" name="postId" value="<?= $viewData['post']->getId() ?>">
+    <button class="btn btn--add" type="submit">Ajouter</button>
+    </form>
+
+    -> ajouter les commentaire de l'article en question
+<div>

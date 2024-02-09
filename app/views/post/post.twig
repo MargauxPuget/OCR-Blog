@@ -1,5 +1,5 @@
 <?php
-    // var_dump($viewData);
+    var_dump($viewData);
     //foreach ($viewData['userList'] as $user){
     //    var_dump($user->getFirstname());
     //}
@@ -7,8 +7,10 @@
 
 <span> Nouvelle article </span>
 
-<h2><?= $viewData['newPost']->getTitle() ?></h2>
+<h2><?= $viewData['post']->getTitle() ?></h2>
 
-<p><?= $viewData['newPost']->getBody() ?></p>
+<p><?= $viewData['post']->getBody() ?></p>
 
-<p><?= $viewData['newPost']->getUser()->getName() ?></p>
+<p><?= $viewData['post']->getUser()->getName() ?></p>
+
+<?php require __DIR__ . '/../comment/formComment.twig'; ?>

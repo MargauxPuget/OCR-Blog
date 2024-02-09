@@ -30,6 +30,25 @@ class PostController extends CoreController
         $this->show('post/home', $viewData);
     }
 
+    public function singlePost()
+    {
+        var_dump("PostController->singlePost()");
+
+        $postId = $_POST['identifiant'];
+        $postRepo = new PostRepository();
+        $post = $postRepo->find($postId);
+
+        $userRepo = new UserRepository();
+        $userList = $userRepo->findAll();
+
+        $viewData = [
+            'pageTitle' => 'OCR - Blog - post',
+            'post'      => $post,
+            'userList'  => $userList,
+        ];
+
+        $this->show('post/post', $viewData);
+    }
     public function formPost()
     {
         // pour la modification dun post
@@ -61,12 +80,12 @@ class PostController extends CoreController
     {
         var_dump("PostController->addPost()");
 
-        $postRepository = new PostRepository();
-        $newPost = $postRepository->addPost();
+        $postRepo = new PostRepository();
+        $newPost = $postRepo->addPost();
 
         $viewData = [
             'pageTitle' => 'OCR - Blog - post',
-            'newPost' => $newPost
+            'post' => $newPost
         ];
 
         $this->show('post/post', $viewData);

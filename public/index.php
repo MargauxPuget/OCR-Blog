@@ -103,10 +103,10 @@ $router->generate('deleteUser');
 
 $match = $router->match();
 
+
 //*--------------------------
 //*   Post
 //*--------------------------
-
 
 $router->map(
   'get',
@@ -131,6 +131,18 @@ $router->map(
   'formPost'
 );
 $router->generate('formPost');
+
+$router->map(
+  'POST',
+  'singlePost',
+  // target :
+  [
+      'action' => 'singlePost',
+      'controller' => 'MPuget\blog\Controllers\PostController'
+  ],
+  'singlePost'
+);
+$router->generate('singlePost');
 
 $router->map(
   'POST',
@@ -167,6 +179,24 @@ $router->map(
   'deletePost'
 );
 $router->generate('deletePost');
+
+
+
+//*--------------------------
+//*   Comment
+//*--------------------------
+
+$router->map(
+  'POST',
+  'addComment',
+  // target :
+  [
+      'action' => 'addComment',
+      'controller' => 'MPuget\blog\Controllers\CommentController'
+  ],
+  'addComment'
+);
+$router->generate('addComment');
 
 
 $match = $router->match();

@@ -1,50 +1,48 @@
 <?php
 
-namespace MPuget\blog\models;
+namespace MPuget\blog\Models;
 
-use MPuget\blog\models\IdTrait;
-use MPuget\blog\models\TimeTrait;
+use MPuget\blog\Models\User;
+use MPuget\blog\Models\Post;
+use MPuget\blog\Models\IdTrait;
+use MPuget\blog\Models\TimeTrait;
 
 /**
  * repositoryClass=CommentRepository::class
  */
 class Comment
 {
-
     use IdTrait;
     use TimeTrait;
-    
-    /**
-     * title
-     * type="text"
-     */
-    private $title;
 
     /**
      * body
      * type="text"
      */
-    private $boby;
+    private $body;
 
     /**
-     * user_id
-     * type="integer"
+     * user
+     * type="User"
      */
-    private $userId;
+    private $user;
 
     /**
-     * post_id
-     * type="integer"
+     * post
+     * type="Post"
      */
-    private $postId;
+    private $post;
+
 
     public function __construct($var = [])
     {
+        var_dump('CONS', $var['post']);
         if (empty($var)) {
             return;
         }
-        $this->setId($var->id);
-        $this->seBody($var->body);
+
+        $this->setBody($var['body']);
+       
         if (!empty($var['user'])) {
             $this->setUser($var['user']);
         }
@@ -59,6 +57,7 @@ class Comment
         if (!empty(($var->updates_at))){
             $this->setUpdatesAt(date('updates_at'));
         }
+        var_dump('CONS_1', $this);
     }
 
     public function getBody(): ?string
@@ -78,7 +77,7 @@ class Comment
         return $this->user;
     }
 
-    public function setUser(int $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
@@ -90,7 +89,7 @@ class Comment
         return $this->post;
     }
 
-    public function setPost(int $post): self
+    public function setPost(Post $post): self
     {
         $this->post = $post;
 

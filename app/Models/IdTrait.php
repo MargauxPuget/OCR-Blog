@@ -1,6 +1,6 @@
 <?php
 
-namespace MPuget\blog\models;
+namespace MPuget\blog\Models;
 
 trait IdTrait
 {

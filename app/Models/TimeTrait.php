@@ -1,6 +1,6 @@
 <?php
 
-namespace MPuget\blog\models;
+namespace MPuget\blog\Models;
 
 use MPuget\blog\Utils\Database;
 
