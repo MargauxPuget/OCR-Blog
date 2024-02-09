@@ -48,13 +48,7 @@ class UserRepository extends AbstractRepository
         // pour récupérer un seul objet de type User, on utilise 
         // la méthode fetchObject() de PDO !
         $result = $pdoStatement->fetchObject();
-
-        $user = new User();
-        $user->setId($result->id);
-        $user->setFirstname($result->firstname);
-        $user->setLastname($result->lastname);
-        $user->setEmail($result->email);
-        $user->setpassword($result->password);
+        $user = new User($result);
 
         return $user;
     }
@@ -119,7 +113,8 @@ class UserRepository extends AbstractRepository
             $updateUser['password'] = $_POST['password'];
         }
 
-        $sql = "UPDATE user SET firstname=:firstname, lastname=:lastname, email=:email, password=:password
+
+        $sql = "UPDATE user SET firstname=:firstname, lastname=:lastname, email=:email, password=:password, updated_at=:updatedAt
         WHERE id=:id";
         $pdoStatement = $this->pdo->prepare($sql);
         $pdoStatement->execute([
@@ -128,6 +123,7 @@ class UserRepository extends AbstractRepository
             'lastname'  => (isset($updateUser['lastname'])) ? $updateUser['lastname'] : $user->getLastname(),
             'email'     => (isset($updateUser['email'])) ? $updateUser['email'] : $user->getEmail(),
             'password'  => (isset($updateUser['password'])) ? $updateUser['password'] : $user->getPassword(),
+            'updatedAt' => $user->setUpdatedAt(date('Y-m-d H:i:s'))->getUpdatedAt()
         ]);
 
     }

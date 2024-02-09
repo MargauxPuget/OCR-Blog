@@ -2,7 +2,6 @@
 
 namespace MPuget\blog\Models;
 
-use DateTime;
 use PDO;
 use MPuget\blog\Utils\Database;
 use MPuget\blog\Models\IdTrait;
@@ -13,6 +12,7 @@ use MPuget\blog\Repository\UserRepository;
 class User
 {
     use IdTrait;
+    use TimeTrait;
 
     /**
      * type="string", length=64
@@ -39,10 +39,19 @@ class User
         if (empty($var)) {
             return;
         }
-        $this->setFirstname($var['firstname']);
-        $this->setLastname($var['lastname']);
-        $this->setEmail($var['email']);
-        $this->setPassword($var['password']);
+        $this->setId($var->id);
+        $this->setFirstname($var->firstname);
+        $this->setLastname($var->lastname);
+        $this->setEmail($var->email);
+        $this->setPassword($var->password);
+        if (empty(($var->created_at))){
+            $this->setCreatedAt(date('Y-m-d H:i:s'));
+        } else {
+            $this->setCreatedAt(date('created_at'));
+        }
+        if (!empty(($var->updates_at))){
+            $this->setUpdatesAt(date('updates_at'));
+        }
     }
 
     public function getFirstname(): ?string

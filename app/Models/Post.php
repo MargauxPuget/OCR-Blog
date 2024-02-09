@@ -3,7 +3,6 @@
 namespace MPuget\blog\models;
 
 use PDO;
-use DateTime;
 use MPuget\blog\Models\User;
 use MPuget\blog\Models\IdTrait;
 use MPuget\blog\Utils\Database;
@@ -46,7 +45,14 @@ class Post
         if (!empty($var['user'])) {
             $this->setUser($var['user']);
         }
-        $this->setCreatedAt(new datetime());
+        if (empty(($var->created_at))){
+            $this->setCreatedAt(date('Y-m-d H:i:s'));
+        } else {
+            $this->setCreatedAt(date('created_at'));
+        }
+        if (!empty(($var->updates_at))){
+            $this->setUpdatesAt(date('updates_at'));
+        }
     }
 
     public function getTitle(): ?string

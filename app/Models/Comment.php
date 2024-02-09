@@ -2,7 +2,6 @@
 
 namespace MPuget\blog\models;
 
-use DateTime;
 use MPuget\blog\models\IdTrait;
 use MPuget\blog\models\TimeTrait;
 
@@ -39,22 +38,27 @@ class Comment
      */
     private $postId;
 
-    public function __construct()
+    public function __construct($var = [])
     {
-        $this->setCreatedAt(new DateTime());
-    }
-
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
+        if (empty($var)) {
+            return;
+        }
+        $this->setId($var->id);
+        $this->seBody($var->body);
+        if (!empty($var['user'])) {
+            $this->setUser($var['user']);
+        }
+        if (!empty($var['post'])) {
+            $this->setPost($var['post']);
+        }
+        if (empty(($var->created_at))){
+            $this->setCreatedAt(date('Y-m-d H:i:s'));
+        } else {
+            $this->setCreatedAt(date('created_at'));
+        }
+        if (!empty(($var->updates_at))){
+            $this->setUpdatesAt(date('updates_at'));
+        }
     }
 
     public function getBody(): ?string
@@ -69,26 +73,26 @@ class Comment
         return $this;
     }
 
-    public function getUserId(): ?int
+    public function getUser(): ?User
     {
-        return $this->userId;
+        return $this->user;
     }
 
-    public function setUserId(int $userId): self
+    public function setUser(int $user): self
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getPostId(): ?int
+    public function getPost(): ?Post
     {
-        return $this->postId;
+        return $this->post;
     }
 
-    public function setPostId(int $postId): self
+    public function setPost(int $post): self
     {
-        $this->postId = $postId;
+        $this->post = $post;
 
         return $this;
     }

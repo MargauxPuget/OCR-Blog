@@ -31,7 +31,6 @@ class PostRepository extends AbstractRepository
         $userRepo = new UserRepository();
         $userId = $result->user_id;
         $user = $userRepo->find($userId);
-
         $result->user = $user;
         
         $post = new Post();
@@ -115,14 +114,15 @@ class PostRepository extends AbstractRepository
             $updatePost['userId'] = $_POST['userId'];
         }
 
-        $sql = "UPDATE post SET title=:title, body=:body, user_id=:userId
+        $sql = "UPDATE post SET title=:title, body=:body, user_id=:userId, updated_at=:updatedAt
         WHERE id=:id";
         $pdoStatement = $this->pdo->prepare($sql);
         $pdoStatement->execute([
             'id'        => $post->getId(),
-            'title' => (isset($updatePost['title'])) ? $updatePost['title'] : $post->getTitle(),
-            'body'  => (isset($updatePost['body'])) ? $updatePost['body'] : $post->getBody(),
-            'userId'     => (isset($updatePost['userId'])) ? $updatePost['userId'] : $post->getUser()->getId(),
+            'title'     => (isset($updatePost['title'])) ? $updatePost['title'] : $post->getTitle(),
+            'body'      => (isset($updatePost['body'])) ? $updatePost['body'] : $post->getBody(),
+            'userId'    => (isset($updatePost['userId'])) ? $updatePost['userId'] : $post->getUser()->getId(),
+            'updatedAt' => $post->setUpdatedAt(date('Y-m-d H:i:s'))->getUpdatedAt()
         ]);
     }
 
