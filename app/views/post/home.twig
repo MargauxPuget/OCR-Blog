@@ -5,7 +5,11 @@
     
 ?>
 
-<h2>HoMe POST</h2>
+<h2>HoMe POST : CRUD utilisateur</h2>
+
+<form class="btn" action="/formPost" method="post">
+    <button class="btn btn--add" type="submit">Ajouter</button>
+</form>
 
 <ul>
     <?php foreach($viewData['postList'] as $post) : ?>
@@ -29,18 +33,17 @@
                     <input hidden type="number" name="identifiant" value="<?= $post->getId() ?>">
                     <button class="btn btn--update" type="submit">Modifier</button>
                 </form>
-                </div>
+                 <form style="margin:10px;" action="/deletePost" method="post">
+                    <input hidden type="number" name="identifiant" value="<?= $post->getId() ?>">
+                    <button class="btn btn--delete" type="submit">Supprimer</button>
+                </form>
+            </div>
         </li>
     <?php endforeach; ?>
 </ul>
 
-<h2>CRUD utilisateur</h2>
 
-<form class="btn" action="/formPost" method="post">
-    <button class="btn btn--add" type="submit">Ajouter</button>
-</form>
-
-<form class="btn" action="/formPost" method="post">
+<!-- <form class="btn" action="/formPost" method="post">
     <label for="post">Choisissez un utilisateur : </label>
 
     <select name="identifiant" id="post">
@@ -64,4 +67,4 @@
         <?php endforeach; ?>
     </select>
     <button class="btn btn--delete" type="submit">Supprimer</button>
-</form>
+</form> -->

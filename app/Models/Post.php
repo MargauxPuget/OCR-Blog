@@ -35,24 +35,8 @@ class Post
     private User $user;
 
     
-    public function __construct($var = [])
+    public function __construct()
     {
-        if (empty($var)) {
-            return;
-        }
-        $this->setTitle($var['title']);
-        $this->setBody($var['body']);
-        if (!empty($var['user'])) {
-            $this->setUser($var['user']);
-        }
-        if (empty(($var->created_at))){
-            $this->setCreatedAt(date('Y-m-d H:i:s'));
-        } else {
-            $this->setCreatedAt(date('created_at'));
-        }
-        if (!empty(($var->updates_at))){
-            $this->setUpdatesAt(date('updates_at'));
-        }
     }
 
     public function getTitle(): ?string
@@ -84,7 +68,7 @@ class Post
         return $this->user;
     }
 
-    public function setUser($user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 

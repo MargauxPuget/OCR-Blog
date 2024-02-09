@@ -34,24 +34,9 @@ class User
      */
     private $password;
 
-    public function __construct($var = [])
+    public function __construct()
     {
-        if (empty($var)) {
-            return;
-        }
-        $this->setId($var->id);
-        $this->setFirstname($var->firstname);
-        $this->setLastname($var->lastname);
-        $this->setEmail($var->email);
-        $this->setPassword($var->password);
-        if (empty(($var->created_at))){
-            $this->setCreatedAt(date('Y-m-d H:i:s'));
-        } else {
-            $this->setCreatedAt(date('created_at'));
-        }
-        if (!empty(($var->updates_at))){
-            $this->setUpdatesAt(date('updates_at'));
-        }
+        
     }
 
     public function getFirstname(): ?string

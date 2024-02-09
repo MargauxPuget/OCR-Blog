@@ -1,0 +1,36 @@
+<?php
+    //var_dump($viewData['commentList']);
+    //foreach ($viewData['userList'] as $user){
+    //    var_dump($user->getFirstname());
+    //}
+?>
+<?php if (!empty($viewData['commentList'])) : ?>
+<div style="margin:10px">
+
+    <h3 style="color:blue;">Commentaires</h3>
+
+    <?php foreach($viewData['commentList'] as $comment) : ?>
+    <div style="border-top:2px solid gray;padding:5px;display:flex;">
+
+        <div>
+            <p style="color:black;"><?= $comment->getBody(); ?></p>
+            <span style="color:gray;"><?= $comment->getUser()->getName(); ?></span>
+        </div>
+
+        <form style="margin:10px;" action="/formComment" method="post">
+            <input hidden type="number" name="identifiant" value="<?= $comment->getId() ?>">
+            <button class="btn btn--update" type="submit">Modifier</button>
+        </form>
+            <form style="margin:10px;" action="/deleteComment" method="post">
+            <input hidden type="number" name="identifiant" value="<?= $comment->getId() ?>">
+            <button class="btn btn--delete" type="submit">Supprimer</button>
+        </form>
+    </div>
+    <?php endforeach; ?>
+</div>
+
+<?php else : ?>
+
+<p>Il n'y a pas encore de commentaires, Commentez !! ;)</p>
+
+<?php endif; ?>

@@ -31,15 +31,21 @@ class CommentRepository extends AbstractRepository
 
         $userRepo = new UserRepository();
         $userId = $result->user_id;
-        $user = $userRepo->find($userId);
+        $user = $userRepo->find(intval($userId));
         $result->user = $user;
 
         $postRepo = new PostRepository();
         $postId = $result->post_id;
         $post = $postRepo->find($postId);
         $result->post = $post;
+
         
         $comment = new Comment($result);
+        $comment->setId($result->id);
+        $comment->setBody($result->body);
+        $comment->setUser($result->user);
+        $comment->setPost($result->post);
+        $comment->setCreatedAt(date('Y-m-d H:i:s'));
 
         return $comment;
     }
@@ -59,7 +65,26 @@ class CommentRepository extends AbstractRepository
             $comment = $this->find($comment['id']);
             $comments[] = $comment;
         }
-        //var_dump('1', $comments);
+        
+        return $comments;
+    }
+
+    public function findAllforOnePost(Post $post)
+    {
+        $pdoStatement = $this->pdo->prepare('SELECT id FROM `comment`
+        WHERE post_id=:postId');
+        $pdoStatement->execute([
+            "postId" => $post->getId(),
+        ]);
+        $commentList = $pdoStatement->fetchAll();
+
+        $comments = [];
+        foreach ($commentList as $comment) {
+
+            $comment = $this->find($comment['id']);
+            $comments[] = $comment;
+        }
+        
         return $comments;
     }
 
@@ -75,21 +100,21 @@ class CommentRepository extends AbstractRepository
             echo('Il faut un un message et un auteur valide pour soumettre le formulaire.');
             return;
         }
-
 		
         $userRepo = new UserRepository();
         $user = $userRepo->find($newComment['userId']);
 		$newComment['user'] = $user;
 
-		
         $postRepo = new PostRepository();
         $post = $postRepo->find($newComment['postId']);
 		$newComment['post'] = $post;
 
-        $comment = new Comment($newComment);
+        $comment = new Comment();
+        $comment->setBody($newComment['body']);
+        $comment->setUser($newComment['user']);
+        $comment->setPost($newComment['post']);
+        $comment->setCreatedAt(date('Y-m-d H:i:s'));
 
-
-		var_dump('5', $comment->getPost()->getId());
         $pdoStatement = $this->pdo->prepare("INSERT INTO comment (body, user_id, post_id)
         VALUES (:body, :userId, :postId)");
         $pdoStatement->execute([
@@ -100,7 +125,7 @@ class CommentRepository extends AbstractRepository
 
         $commentId = Database::getPDO()->lastInsertId();
         $comment = $this->find($commentId);
-var_dump($comment);
+
         return $comment;
     }
 
@@ -109,9 +134,17 @@ var_dump($comment);
        
     }
 
-    public function deleteComment() : bool
+    public function deleteComment(Comment $comment) : bool
     {
-        
+        var_dump("CommentRepository->deleteComment()");
+
+        $sql = "DELETE FROM `comment` WHERE id = ( :id) ";
+        $pdoStatement = $this->pdo->prepare($sql);
+        $pdoStatement->execute([
+            'id' => $comment->getId(),
+        ]);
+
+        return true;
     }
 
 }

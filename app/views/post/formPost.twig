@@ -36,6 +36,6 @@
         </select>
     </div>
     <input hidden type="number" name="identifiant" value="<?= (empty($viewData['post'])) ? '' : $viewData['post']->getId() ?>">
-    <button type="submit">Créer</button>
+    <button type="submit"><?= ($updatePost) ? 'Mettre à jour' : 'Créer' ; ?></button>
 </form>
 

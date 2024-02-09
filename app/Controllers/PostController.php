@@ -4,22 +4,26 @@ namespace MPuget\blog\Controllers;
 
 use MPuget\blog\Models\Post;
 use MPuget\blog\Models\TimeTrait;
+use MPuget\blog\Controllers\CoreController;
 use MPuget\blog\Repository\PostRepository;
 use MPuget\blog\Repository\UserRepository;
-use MPuget\blog\Controllers\CoreController;
+use MPuget\blog\Repository\CommentRepository;
 
 class PostController extends CoreController
 {
     protected $postRepo;
+    protected $userRepo;
+    protected $commentRepo;
 
     public function __construct(){
         $this->postRepo = new PostRepository();
+        $this->userRepo = new UserRepository();
+        $this->commentRepo = new CommentRepository();
     }
 
     public function home()
     {
-        $postRepo = new PostRepository;
-        $postList = $postRepo->findAll();
+        $postList = $this->postRepo->findAll();
         
         $viewData = [
             'pageTitle' => 'OCR - Blog - Post',
@@ -35,16 +39,15 @@ class PostController extends CoreController
         var_dump("PostController->singlePost()");
 
         $postId = $_POST['identifiant'];
-        $postRepo = new PostRepository();
-        $post = $postRepo->find($postId);
-
-        $userRepo = new UserRepository();
-        $userList = $userRepo->findAll();
+        $post = $this->postRepo->find($postId);
+        $userList = $this->userRepo->findAll();
+        $commentList = $this->commentRepo->findAllforOnePost($post);
 
         $viewData = [
-            'pageTitle' => 'OCR - Blog - post',
-            'post'      => $post,
-            'userList'  => $userList,
+            'pageTitle'     => 'OCR - Blog - post',
+            'post'          => $post,
+            'userList'      => $userList,
+            'commentList'   => $commentList,
         ];
 
         $this->show('post/post', $viewData);
@@ -64,8 +67,7 @@ class PostController extends CoreController
         }
 
         // On récupère tous les utilisateur
-        $userRepo = new UserRepository();
-        $userList = $userRepo->findAll();
+        $userList = $this->userRepo->findAll();
 
         $viewData = [
             'pageTitle' => 'OCR - Blog - formPost',
@@ -80,12 +82,30 @@ class PostController extends CoreController
     {
         var_dump("PostController->addPost()");
 
-        $postRepo = new PostRepository();
-        $newPost = $postRepo->addPost();
+        $newPost = $_POST;
+        if (
+        !isset($newPost['title'])
+        || !isset($newPost['body'])
+        || !isset($newPost['userId'])
+        ) {
+            echo('Il faut un title et un message et un auteur valide pour soumettre le formulaire.');
+            return;
+        }
 
+        $post = new Post($newPost);
+
+        $user = $this->userRepo->find($newPost['userId']);
+        $int = intval($user->getId());
+
+        $post->setTitle($newPost['title']);
+        $post->setBody($newPost['body']);
+        $post->setUser($user);
+        $post->setCreatedAt(date('Y-m-d H:i:s'));
+
+        $post = $this->postRepo->addPost($post);
         $viewData = [
             'pageTitle' => 'OCR - Blog - post',
-            'post' => $newPost
+            'post' => $post
         ];
 
         $this->show('post/post', $viewData);
@@ -96,15 +116,24 @@ class PostController extends CoreController
         var_dump("PostController->updatePost()");
         
         $postData = $_POST;
-        var_dump($postData);
         if (!isset($postData['identifiant']) && !is_int($postData['identifiant'])) {
             echo("Il faut l'identifiant d'un utilisateur.");
             return false;
         }
 
-        $postId = intval($postData['identifiant']);
-        
-        $post = $this->postRepo->updatePost($postId);
+        $post = $this->postRepo->find($_POST['identifiant']);
+
+        if (isset($postData['title']) && ($postData['title'] !== $post->getTitle())){
+            $post->setTitle($postData['title']);
+        }
+        if (isset($postData['body']) && ($postData['body'] !== $post->getBody())){
+            $post->setBody($postData['body']);
+        }
+        if (isset($postData['userId']) && ($postData['userId'] !== $post->getUser()->getId())){
+            $user = $this->userRepo->find($postData['userId']);
+            $post->setUser($user);
+        }
+        $post = $this->postRepo->updatePost($post);
 
         $viewData = [
             'pageTitle' => 'OCR - Blog - post - update',
@@ -118,8 +147,16 @@ class PostController extends CoreController
     {
         var_dump("PostController->deletePost()");
 
-        $postRepository = new PostRepository();
-        $post = $postRepository->deletePost();
+        $postData = $_POST;
+
+        if (!isset($postData['identifiant']) && !is_int($postData['identifiant'])) {
+            echo("Il faut l'identifiant d'un post/article.");
+            return false;
+        }
+        
+        $post = $this->postRepo->find($postData['identifiant']);
+
+        $post = $this->postRepository->deletePost($post);
 
         $viewData = [
             'pageTitle' => 'OCR - Blog - post - delete',

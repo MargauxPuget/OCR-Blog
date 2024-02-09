@@ -32,5 +32,5 @@
     </div>
 
     <input hidden type="number" name="identifiant" value="<?= (empty($viewData['user'])) ? '' : $viewData['user']->getId() ?>">
-    <button type="submit">Créer</button>
+    <button type="submit"><?= ($updateUser) ? 'Mettre à jour' : 'Créer' ; ?></button>
 </form>

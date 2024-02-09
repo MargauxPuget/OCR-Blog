@@ -36,6 +36,18 @@ $router->map(
 $router->generate('home');
 
 
+$router->map(
+  'get',
+  'toto',
+  // target :
+  [
+      'action' => 'toto',
+      'controller' => 'MPuget\blog\Controllers\UserController'
+  ],
+  'toto'
+);
+$router->generate('toto');
+
 //*--------------------------
 //*   User
 //*--------------------------
@@ -197,6 +209,18 @@ $router->map(
   'addComment'
 );
 $router->generate('addComment');
+
+$router->map(
+  'post',
+  'deleteComment',
+  // target :
+  [
+      'action' => 'deleteComment',
+      'controller' => 'MPuget\blog\Controllers\CommentController'
+  ],
+  'deleteComment'
+);
+$router->generate('deletePost');
 
 
 $match = $router->match();

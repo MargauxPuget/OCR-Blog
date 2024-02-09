@@ -34,30 +34,8 @@ class Comment
     private $post;
 
 
-    public function __construct($var = [])
+    public function __construct()
     {
-        var_dump('CONS', $var['post']);
-        if (empty($var)) {
-            return;
-        }
-
-        $this->setBody($var['body']);
-       
-        if (!empty($var['user'])) {
-            $this->setUser($var['user']);
-        }
-        if (!empty($var['post'])) {
-            $this->setPost($var['post']);
-        }
-        if (empty(($var->created_at))){
-            $this->setCreatedAt(date('Y-m-d H:i:s'));
-        } else {
-            $this->setCreatedAt(date('created_at'));
-        }
-        if (!empty(($var->updates_at))){
-            $this->setUpdatesAt(date('updates_at'));
-        }
-        var_dump('CONS_1', $this);
     }
 
     public function getBody(): ?string

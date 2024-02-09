@@ -2,6 +2,7 @@
 
 namespace MPuget\blog\Controllers;
 
+use MPuget\blog\twig\Twig;
 use MPuget\blog\Models\Post;
 use MPuget\blog\Models\User;
 use MPuget\blog\Models\TimeTrait;
@@ -17,7 +18,12 @@ class UserController extends CoreController
         $this->userRepo = new UserRepository();
     }
 
-    // une page = une méthode
+    public function toto(){
+        $twig = new Twig();
+        echo $twig->getTwig()->render('index.twig');
+    }
+
+    
     public function home()
     {
         $userList = $this->userRepo->findAll();
@@ -52,7 +58,7 @@ class UserController extends CoreController
             $userId = intval($postData['identifiant']);
         
             $user = $this->userRepo->find($userId);
-;        }
+        }
 
         $viewData = [
             'pageTitle' => 'OCR - Blog - formUser',
@@ -65,12 +71,31 @@ class UserController extends CoreController
     public function addUser()
     {
         var_dump("UserController->addUser()");
-        
-        $newUser = $this->userRepo->addUser();
+
+        $newUser = $_POST;
+        if (
+        !isset($newUser['firstname'])
+        || !isset($newUser['lastname'])
+        || !isset($newUser['email'])
+        || !filter_var($newUser['email'], FILTER_VALIDATE_EMAIL)
+        || !isset($newUser['password'])
+        ) {
+            echo('Il faut un email et un message valide pour soumettre le formulaire.');
+            return;
+        }
+
+        $user = new User();
+        $user->setFirstname($newUser['firstname']);
+        $user->setLastname($newUser['lastname']);
+        $user->setEmail($newUser['email']);
+        $user->setPassword($newUser['password']);
+        $user->setCreatedAt(date('Y-m-d H:i:s'));
+
+        $newUser = $this->userRepo->addUser($user);
 
         $viewData = [
             'pageTitle' => 'OCR - Blog - user',
-            'newUser' => $newUser
+            'user' => $newUser
         ];
 
         $this->show('user/user', $viewData);
@@ -87,9 +112,23 @@ class UserController extends CoreController
             return false;
         }
 
-        $userId = intval($postData['identifiant']);
+        $user = $this->userRepo->find($_POST['identifiant']);
+
+        if (isset($_POST['firstname']) && ($_POST['firstname'] !== $user->getFirstname())){
+            $user->setFirstname($_POST['firstname']);
+        }
+        if (isset($_POST['lastname']) && ($_POST['lastname'] !== $user->getLastname())){
+            $user->setLastname($_POST['lastname']);
+        }
+        if (isset($_POST['email']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)
+        && ($_POST['email'] !== $user->getEmail())){
+            $user->setEmail($_POST['email']);
+        }
+        if (isset($_POST['password']) && ($_POST['password'] !== $user->getPassword())){
+            $user->setPassword($_POST['password']);
+        }      
         
-        $user = $this->userRepo->updateUser($userId);
+        $user = $this->userRepo->updateUser($user);
 
         $viewData = [
             'pageTitle' => 'OCR - Blog - user - update',
@@ -111,9 +150,11 @@ class UserController extends CoreController
             return false;
         }
 
-        $userId = intval($postData['identifiant']);
+        $user = $this->userRepo->find($postData['identifiant']);
+
+        $userId = $user->getId();
         
-        $user = $this->userRepo->deleteUser($userId);
+        $this->userRepo->deleteUser($user);
 
         $viewData = [
             'pageTitle' => 'OCR - Blog - user - delete',

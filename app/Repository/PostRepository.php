@@ -20,26 +20,27 @@ class PostRepository extends AbstractRepository
     public function find($id)
     {
         $id = intval($id);
-
         $pdoStatement = $this->pdo->prepare('SELECT * FROM `post` WHERE id = :id');
         $pdoStatement->execute([
             'id' => $id,
         ]);
         $result = $pdoStatement->fetchObject();
 
-
-        $userRepo = new UserRepository();
-        $userId = $result->user_id;
-        $user = $userRepo->find($userId);
-        $result->user = $user;
         
         $post = new Post();
-        $post->setId($result->id);
-        $post->setTitle($result->title);
-        $post->setBody($result->body);
-        $post->setUser($result->user);
-        $post->setCreatedAt($result->created_at);
-        $post->setUpdatedAt($result->updated_at);
+        if (!empty($result)) {
+            $userRepo = new UserRepository();
+            $userId = $result->user_id;
+            $user = $userRepo->find($userId);
+            $result->user = $user;
+
+            $post->setId($result->id);
+            $post->setTitle($result->title);
+            $post->setBody($result->body);
+            $post->setUser($result->user);
+            $post->setCreatedAt($result->created_at);
+            $post->setUpdatedAt($result->updated_at);
+        }
 
         return $post;
     }
@@ -59,36 +60,20 @@ class PostRepository extends AbstractRepository
             $post = $this->find($post['id']);
             $posts[] = $post;
         }
-        //var_dump('1', $posts);
         return $posts;
     }
 
-    public function addPost()
+    public function addPost(Post $post)
     {
         var_dump("PostRepository->addPost()");
 
-        $newPost = $_POST;
-        if (
-        !isset($newPost['title'])
-        || !isset($newPost['body'])
-        || !isset($newPost['userId'])
-        ) {
-            echo('Il faut un title et un message et un auteur valide pour soumettre le formulaire.');
-            return;
-        }
 
-        $post = new Post($newPost);
-        $userRepo = new UserRepository();
-
-        $user = $userRepo->find($newPost['userId']);
-        $int = intval($user->getId());
-
-
-        $pdoStatement = $this->pdo->prepare("INSERT INTO post (title, body, user_id) VALUES (:title, :body, :userId)");
+        $pdoStatement = $this->pdo->prepare("INSERT INTO post (title, body, user_id)
+        VALUES (:title, :body, :userId)");
         $pdoStatement->execute([
-            'title' => $post->getTitle(),
-            'body'  => $post->getBody(),
-            'userId' => $int,
+            'title'     => $post->getTitle(),
+            'body'      => $post->getBody(),
+            'userId'    => $post->getUser()->getId(),
         ]);
 
         $postId = Database::getPDO()->lastInsertId();
@@ -97,22 +82,9 @@ class PostRepository extends AbstractRepository
         return $post;
     }
 
-    public function updatePost()
+    public function updatePost(Post $post)
     {
         var_dump("PostRepository->updatePost()");
-
-        $post = $this->find($_POST['identifiant']);
-
-        $updatePost = [];
-        if (isset($_POST['title']) && ($_POST['title'] !== $post->getTitle())){
-            $updatePost['title'] = $_POST['title'];
-        }
-        if (isset($_POST['body']) && ($_POST['body'] !== $post->getBody())){
-            $updatePost['body'] = $_POST['body'];
-        }
-        if (isset($_POST['userId']) && ($_POST['userId'] !== $post->getUser()->getId())){
-            $updatePost['userId'] = $_POST['userId'];
-        }
 
         $sql = "UPDATE post SET title=:title, body=:body, user_id=:userId, updated_at=:updatedAt
         WHERE id=:id";
@@ -126,27 +98,15 @@ class PostRepository extends AbstractRepository
         ]);
     }
 
-    public function deletePost() : bool
+    public function deletePost(Post $post) : bool
     {
         var_dump("PostRepository->deletePost()");
-
-        $postData = $_POST;
-        var_dump($postData);
-        if (!isset($postData['identifiant']) && !is_int($postData['identifiant'])) {
-            echo("Il faut l'identifiant d'un post/article.");
-            return false;
-        }
-        $postId = $postData['identifiant'];
-        echo('Byebye, number :  ' . $postId . ' ! <br>');
 
         $sql = "DELETE FROM `post` WHERE id = ( :id) ";
         $pdoStatement = $this->pdo->prepare($sql);
         $pdoStatement->execute([
-            'id' => $postId,
+            'id' => $post->getId(),
         ]);
-
-
-        echo('On pleur votre départ ! <br>');
 
         return true;
 
