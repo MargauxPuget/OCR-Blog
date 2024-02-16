@@ -23,29 +23,34 @@ class CommentRepository extends AbstractRepository
     {
         $id = intval($id);
 
+        var_dump($id);
         $pdoStatement = $this->pdo->prepare('SELECT * FROM `comment` WHERE id = :id');
         $pdoStatement->execute([
             'id' => $id,
         ]);
         $result = $pdoStatement->fetchObject();
 
-        $userRepo = new UserRepository();
-        $userId = $result->user_id;
-        $user = $userRepo->find(intval($userId));
-        $result->user = $user;
-
-        $postRepo = new PostRepository();
-        $postId = $result->post_id;
-        $post = $postRepo->find($postId);
-        $result->post = $post;
-
         
-        $comment = new Comment($result);
-        $comment->setId($result->id);
-        $comment->setBody($result->body);
-        $comment->setUser($result->user);
-        $comment->setPost($result->post);
-        $comment->setCreatedAt(date('Y-m-d H:i:s'));
+        $comment = new Comment();
+        if (!empty($result)) {
+
+            $userRepo = new UserRepository();
+            $userId = $result->user_id;
+            $user = $userRepo->find($userId);
+            $result->user = $user;
+
+
+            $postRepo = new postRepository();
+            $postId = $result->post_id;
+            $post = $postRepo->find($postId);
+            $result->post = $post;
+
+            $comment->setId($result->id);
+            $comment->setBody($result->body);
+            $comment->setUser($result->user);
+            $comment->setPost($result->post);
+            $comment->setCreatedAt(date('Y-m-d H:i:s'));
+        }
 
         return $comment;
     }
@@ -72,7 +77,7 @@ class CommentRepository extends AbstractRepository
     public function findAllforOnePost(Post $post)
     {
         $pdoStatement = $this->pdo->prepare('SELECT id FROM `comment`
-        WHERE post_id=:postId');
+        WHERE post_id=:postId ORDER BY `created_at` DESC');
         $pdoStatement->execute([
             "postId" => $post->getId(),
         ]);
@@ -93,6 +98,7 @@ class CommentRepository extends AbstractRepository
         var_dump("CommentRepository->addComment()");
 
         $newComment = $_POST;
+        var_dump($_POST);
         if (
 			!isset($newComment['body'])
 			|| !isset($newComment['userId'])
@@ -104,7 +110,7 @@ class CommentRepository extends AbstractRepository
         $userRepo = new UserRepository();
         $user = $userRepo->find($newComment['userId']);
 		$newComment['user'] = $user;
-
+var_dump($newComment);
         $postRepo = new PostRepository();
         $post = $postRepo->find($newComment['postId']);
 		$newComment['post'] = $post;
@@ -126,11 +132,15 @@ class CommentRepository extends AbstractRepository
         $commentId = Database::getPDO()->lastInsertId();
         $comment = $this->find($commentId);
 
+        unset($_POST);
+        
+
         return $comment;
     }
 
-    public function updateComment()
+    public function updateComment(Comment $comment)
     {
+        var_dump("CommentRepository->updateComment()");
        
     }
 

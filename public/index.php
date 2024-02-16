@@ -210,6 +210,33 @@ $router->map(
 );
 $router->generate('addComment');
 
+
+$router->map(
+  'post',
+  'updateComment',
+  // target :
+  [
+      'action' => 'updateComment',
+      'controller' => 'MPuget\blog\Controllers\CommentController'
+  ],
+  'updateComment'
+);
+$router->generate('updateComment');
+
+
+$router->map(
+  'POST',
+  'formComment',
+  // target :
+  [
+      'action' => 'formComment',
+      'controller' => 'MPuget\blog\Controllers\CommentController'
+  ],
+  'formComment'
+);
+$router->generate('formComment');
+
+
 $router->map(
   'post',
   'deleteComment',

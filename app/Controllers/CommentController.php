@@ -22,8 +22,49 @@ class CommentController extends CoreController
 
     public function formComment()
     {
-		
+		var_dump('CommentController->formComment()');
+
+        // pour la modification dun comment
+        $commentData = $_POST;
+        $comment = [];
+        if (isset($commentData['identifiant'])) {
+            if (!isset($commentData['identifiant']) && !is_int($commentData['identifiant'])) {
+                echo("Il faut l'identifiant d'un utilisateur.");
+                return false;
+            }
+            $CommentId = intval($commentData['identifiant']);
+            $comment = $this->commentRepo->find($CommentId);
+        }
+
+        // On récupère tous les info utilise à l'affichage de la page d'un single post
+        $post = $this->postRepo->find($comment->getPost()->getId());
+        $userList = $this->userRepo->findAll();
+        $commentList = $this->commentRepo->findAllforOnePost($post);
+
+        $viewData = [
+            'pageTitle' => 'OCR - Blog - formComment',
+            'comment'   => $comment,
+            'post'      => $post,
+            //'commentList'  => $commentList,
+            //'userList'  => $userList,
+        ];
+
+        $this->show('comment/formComment', $viewData);
     }
+
+    public function updateComment()
+    {
+        var_dump("CommentController->updateComment()");
+
+        
+
+        $viewData = [
+            'pageTitle' => 'OCR - Blog - post - update',
+            'post' => $post,
+        ];
+
+        $this->show('post/post', $viewData);
+    } 
 
     public function addComment()
     {
@@ -46,9 +87,6 @@ class CommentController extends CoreController
 
         $this->show('post/post', $viewData);
     }
-
-    public function updateComment()
-    {} 
 
     public function deleteComment()
     {

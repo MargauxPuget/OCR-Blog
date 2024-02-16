@@ -1,8 +1,8 @@
 <?php
-    //var_dump($viewData['commentList']);
-    //foreach ($viewData['userList'] as $user){
-    //    var_dump($user->getFirstname());
-    //}
+    // var_dump($viewData['commentList']);
+    // foreach ($viewData['userList'] as $user){
+    //     var_dump($user->getFirstname());
+    // }
 ?>
 <?php if (!empty($viewData['commentList'])) : ?>
 <div style="margin:10px">
@@ -14,6 +14,7 @@
 
         <div>
             <p style="color:black;"><?= $comment->getBody(); ?></p>
+            <span><?= $comment->getUser()->getcreatedAt(); ?></span>
             <span style="color:gray;"><?= $comment->getUser()->getName(); ?></span>
         </div>
 

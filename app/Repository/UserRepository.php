@@ -48,6 +48,7 @@ class UserRepository extends AbstractRepository
         $result = $pdoStatement->fetchObject();
 
         $user = new User();
+
         if (!empty($result)) {
             $user->setId($result->id);
             $user->setFirstname($result->firstname);

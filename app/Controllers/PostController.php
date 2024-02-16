@@ -2,6 +2,7 @@
 
 namespace MPuget\blog\Controllers;
 
+use MPuget\blog\twig\Twig;
 use MPuget\blog\Models\Post;
 use MPuget\blog\Models\TimeTrait;
 use MPuget\blog\Controllers\CoreController;
@@ -14,8 +15,10 @@ class PostController extends CoreController
     protected $postRepo;
     protected $userRepo;
     protected $commentRepo;
+    protected $twig;
 
     public function __construct(){
+        $this->twig = new Twig();
         $this->postRepo = new PostRepository();
         $this->userRepo = new UserRepository();
         $this->commentRepo = new CommentRepository();
@@ -23,6 +26,7 @@ class PostController extends CoreController
 
     public function home()
     {
+        var_dump('PostControler->home()');
         $postList = $this->postRepo->findAll();
         
         $viewData = [
@@ -31,7 +35,8 @@ class PostController extends CoreController
         ];
         //var_dump($viewData['postList']);
 
-        $this->show('post/home', $viewData);
+        echo $this->twig->getTwig()->render('post/home.twig', $viewData);
+        // $this->show('post/home', $viewData);
     }
 
     public function singlePost()
@@ -52,6 +57,7 @@ class PostController extends CoreController
 
         $this->show('post/post', $viewData);
     }
+    
     public function formPost()
     {
         // pour la modification dun post

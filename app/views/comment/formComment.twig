@@ -1,17 +1,32 @@
+<?php
+    $updateComment = false;
+    //var_dump($viewData);
+    if (!empty($viewData['comment'])) {
+        var_dump($viewData['comment']);
+        $updateComment = true;
+    }
+    var_dump($updateComment);
+?>
 
 <div style="border:1px solid black;margin-top:10px;padding:10px;">
-    -> ajouter un btn ajouter un commentaire
-    <form class="" action="/addComment" method="post">
+    <h3 class="">Ajouter un nouveau commentaire !</h3>
+
+
+    <?php if($updateComment) : ?>
+    <form action="/updateComment" method="post">
+    <?php else : ?>
+    <form action="/addComment" method="post">
+    <?php endif; ?>
 
         <div>
             <label for="body">Message</label>
-            <textarea name="body"></textarea>
+            <textarea name="body"><?= (empty($viewData['comment'])) ? '' : $viewData['comment']->getBody(); ?></textarea>
         </div>
         <div>
             <label for="user">Choisissez un utilisateur : </label>
 
             <select name="userId" id="user">
-                <option value="">--Choisissez quelqu'un--</option>
+                <option value="<?= (empty($viewData['comment'])) ? '' : $viewData['comment']->getUser()->getId(); ?>"><?= (empty($viewData['comment'])) ? '-- Choisiez un utilisateur / auteur --' : $viewData['comment']->getUser()->getName(); ?></option>
 
                 <?php foreach ($viewData['userList'] as $user): ?>
                     <option value="<?= $user->getId() ?>"> <?= $user->getName() ?></option>
@@ -20,8 +35,6 @@
         </div>
 		
     	<input hidden type="number" name="postId" value="<?= $viewData['post']->getId() ?>">
-    <button class="btn btn--add" type="submit">Ajouter</button>
+    <button class="btn btn--add" type="submit"><?= ($updateComment) ? 'Mettre à jour' : 'Ajouter' ; ?></button>
     </form>
-
-    -> ajouter les commentaire de l'article en question
-<div>
+</div>

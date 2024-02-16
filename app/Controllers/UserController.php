@@ -13,14 +13,16 @@ class UserController extends CoreController
 {
 
     protected $userRepo;
+    protected $twig;
+
 
     public function __construct(){
         $this->userRepo = new UserRepository();
+        $this->twig = new Twig();
     }
 
     public function toto(){
-        $twig = new Twig();
-        echo $twig->getTwig()->render('index.twig');
+        echo $this->twig->getTwig()->render('index.twig');
     }
 
     
@@ -38,8 +40,8 @@ class UserController extends CoreController
         } */
 
 
-
-        $this->show('user/home', $viewData);
+        echo $this->twig->getTwig()->render('user/home.twig', $viewData);
+        //$this->show('user/home', $viewData);
     }
 
     public function formUser()
